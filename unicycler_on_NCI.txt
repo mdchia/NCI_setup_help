@@ -1,0 +1,110 @@
+#####make sure no compiler modules are loaded initially
+
+## dependencies - Racon
+mkdir $HOME/mypackages
+cd $HOME/mypackages
+git clone --recursive https://github.com/isovic/racon.git racon-1.3.0
+cd racon-1.3.0
+mkdir build
+cd build
+module load cmake/3.8.2
+cmake -DCMAKE_BUILD_TYPE=Release ..
+module load gcc/4.9.0
+make
+module unload gcc/4.9.0
+
+##now make a module out of it
+
+mkdir -p $HOME/mymodules/racon
+nano $HOME/mymodules/racon/1.3.0
+
+#%Module1.0#####################################################################
+source /opt/Modules/extensions/extensions.tcl
+proc ModulesHelp { } {
+        puts stderr "\tAdds racon to the path"
+}
+module-whatis    "racon"
+set raconversion 1.3.0
+prepend-path PATH /home/801/mc4673/mypackages/racon-1.3.0/build/bin
+
+## dependencies - Pilon
+wget https://github.com/broadinstitute/pilon/releases/download/v1.22/pilon-1.22.jar
+
+mkdir -p $HOME/mymodules/pilon
+nano $HOME/mymodules/pilon/1.22
+
+#%Module1.0#####################################################################
+source /opt/Modules/extensions/extensions.tcl
+proc ModulesHelp { } {
+        puts stderr "\tAdds pilon to the path"
+}
+module-whatis    "pilon"
+set pilonversion 1.22
+soft-prereq java/jdk1.8.0_60
+prepend-path PATH /home/801/mc4673/mypackages/
+
+## dependencies - SPAdes
+
+wget http://cab.spbu.ru/files/release3.12.0/SPAdes-3.12.0.tar.gz
+tar -xzf SPAdes-3.12.0.tar.gz
+cd SPAdes-3.12.0
+PREFIX=/home/801/mc4673/mypackages/SPAdes-3.12.0 ./spades_compile.sh
+
+mkdir -p $HOME/mymodules/spades
+nano $HOME/mymodules/spades/3.12.0
+
+#%Module1.0#####################################################################
+source /opt/Modules/extensions/extensions.tcl
+proc ModulesHelp { } {
+        puts stderr "\tAdds SPAdes to the path"
+}
+module-whatis    "spades"
+set spadesversion 3.12.0
+prepend-path PATH /home/801/mc4673/mypackages/SPAdes-3.12.0
+
+## dependencies - bowtie2 (needs conda first)
+module load conda36
+conda install bowtie2
+
+## samtools - already installed
+module load samtools/1.4
+
+## blast+ - already installed
+module load blast/2.7.1p
+
+## load Python
+module load python3/3.6.2
+
+cd $HOME/mypackages
+git clone https://github.com/rrwick/Unicycler.git Unicycler-0.4.5
+cd Unicycler-0.4.5
+module load gcc/6.2.0
+make
+
+####now make a module out of it
+mkdir -p $HOME/mymodules/unicycler
+nano $HOME/mymodules/unicycler/0.4.5
+
+#%Module1.0#####################################################################
+source /opt/Modules/extensions/extensions.tcl
+proc ModulesHelp { } {
+        puts stderr "\tAdds unicycler to the path"
+}
+module-whatis    "unicycler"
+soft-prereq python3/3.6.2
+soft-prereq samtools/1.4
+soft-prereq blast/2.7.1p
+soft-prereq conda36
+soft-prereq pilon/1.22
+soft-prereq racon/1.3.0
+soft-prereq spades/3.12.0
+
+set unicyclerversion 0.4.5
+prepend-path PATH /home/801/mc4673/mypackages/Unicycler-0.4.5
+prepend-path PYTHONPATH /home/801/mc4673/mypackages/Unicycler-0.4.5
+
+####only once add the following line to ~/.profile
+module use -a $HOME/mymodules
+
+#### to use
+unicycler 
