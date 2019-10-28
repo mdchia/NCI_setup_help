@@ -2,7 +2,7 @@
 
 # Settings
 
-# Ensure all paths are writable
+# Ensure all paths are writable (and absolute, unless you're sure of what you're doing)
 # Caution: Assumes that Guppy is packaged as an "ont-guppy" folder
 
 # Copy link from the "Linux 64-bit GPU" download button in Community
