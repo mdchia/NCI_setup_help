@@ -20,7 +20,7 @@ guppyInstallPath=/g/data/xe2/opt/apps/guppy330/
 guppyModule=/g/data/xe2/opt/modules/guppy/3.3.0
 
 mkdir -p $guppyInstallPath
-pushd $guppyInstallPath
+cd $guppyInstallPath
 wget $guppyURL
 
 # ${guppyURL##*/} should just get the filename e.g. ont-guppy_3.3.0_linux64.tar.gz
@@ -40,5 +40,3 @@ module-whatis "guppy basecaller"
 
 prepend-path PATH ${guppyInstallPath}ont-guppy/bin
 EOT
-
-popd
