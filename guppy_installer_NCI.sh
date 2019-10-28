@@ -2,8 +2,12 @@
 
 # Settings
 
-# Ensure all paths are writable (and absolute, unless you're sure of what you're doing)
-# Caution: Assumes that Guppy is packaged as an "ont-guppy" folder
+# Ensure all paths are writable (and absolute, unless you're sure of what
+# you're doing)
+
+# Caution: Assumes that Guppy is packaged as an "ont-guppy" folder and that
+# executables are in the "ont-guppy/bin" folder
+# (ONT may change this in the future)
 
 # Copy link from the "Linux 64-bit GPU" download button in Community
 # https://community.nanoporetech.com/downloads
